@@ -19,6 +19,8 @@ def home(request):
 
 def detail(request,pk):
     friend = Friend.objects.get(profile_id=pk)
+    user = request.user.profile
+    friends = user.friends.all()
     chat_messages = ChatMessage.objects.filter((Q(msg_sender = request.user.profile) and Q(msg_receiver = friend.profile)) |  (Q(msg_sender = friend.profile ) and Q(msg_receiver = request.user.profile))).order_by('time_sent')
     chat_count = chat_messages.count()
     if request.method == 'POST':
@@ -32,11 +34,11 @@ def detail(request,pk):
         
         chat_messages = ChatMessage.objects.filter((Q(msg_sender = request.user.profile) and Q(msg_receiver = friend.profile)) |  (Q(msg_sender = friend.profile ) and Q(msg_receiver = request.user.profile))).order_by('time_sent')
         chat_count = chat_messages.count()
-        context = {"friend":friend,'chat_messages':chat_messages,'chat_count':chat_count}
+        context = {"friend":friend,'chat_messages':chat_messages,'chat_count':chat_count,'friends':friends}
         return redirect(request.META['HTTP_REFERER'],context)
         
         
-    context={"friend":friend,'chat_messages':chat_messages,'chat_count':chat_count}
+    context={"friend":friend,'chat_messages':chat_messages,'chat_count':chat_count,'friends':friends}
     return render(request,"chat/detail.html",context)
 
 def sendMessages(request,pk):

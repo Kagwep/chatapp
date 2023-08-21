@@ -18,6 +18,11 @@
   -webkit-flex-direction: column;
   flex-direction: column;
 }
+  .messageform{
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
 .chatbox--tray {
   bottom: -330px;

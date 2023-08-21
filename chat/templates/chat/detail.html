@@ -1,186 +1,5 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container">
-  <div class="row no-gutters">
-    <div class="col-md-4 border-right">
-      <div class="settings-tray">
-        <img
-          class="profile-image"
-          src="{{request.user.profile.picture.url}}"
-          alt=""
-        />
-        <span class="settings-tray--right">
-          <i class="fa fa-refresh"></i>
-          <i class="fa-regular fa-message"></i>
-          <i class="fa fa-bars"></i>
-        </span>
-      </div>
-      <div class="search-box">
-        <div class="input-wrapper">
-          <i class="material-icons">search</i>
-          <input placeholder="Search here" type="text" />
-        </div>
-      </div>
-      <div class="friend-drawer friend-drawer--onhover">
-        <img
-          class="profile-image"
-          src="https://randomuser.me/api/portraits/men/20.jpg"
-          alt=""
-        />
-        <div class="text">
-          <h6>Robo Cop</h6>
-          <p class="text-muted">Hey, you're arrested!</p>
-        </div>
-        <span class="time text-muted small">13:21</span>
-      </div>
-      <hr />
-      <div class="friend-drawer friend-drawer--onhover">
-        <img
-          class="profile-image"
-          src="https://randomuser.me/api/portraits/women/64.jpg"
-          alt=""
-        />
-        <div class="text">
-          <h6>Optimus</h6>
-          <p class="text-muted">Wanna grab a beer?</p>
-        </div>
-        <span class="time text-muted small">00:32</span>
-      </div>
-      <hr />
-      <div class="friend-drawer friend-drawer--onhover">
-        <img
-          class="profile-image"
-          src="https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fblogs-images.forbes.com%2Fmarkhughes%2Ffiles%2F2016%2F01%2FTerminator-2-1200x873.jpg"
-          alt=""
-        />
-        <div class="text">
-          <h6>Skynet</h6>
-          <p class="text-muted">Seen that canned piece of s?</p>
-        </div>
-        <span class="time text-muted small">13:21</span>
-      </div>
-      <hr />
-      <div class="friend-drawer friend-drawer--onhover">
-        <img
-          class="profile-image"
-          src="http://i66.tinypic.com/2qtbqxe.jpg"
-          alt=""
-        />
-        <div class="text">
-          <h6>Termy</h6>
-          <p class="text-muted">Im studying spanish...</p>
-        </div>
-        <span class="time text-muted small">13:21</span>
-      </div>
-      <hr />
-      <div class="friend-drawer friend-drawer--onhover">
-        <img
-          class="profile-image"
-          src="https://cdn.vox-cdn.com/thumbor/AYUayCXcqYxHDkR4a1N9azY5c_8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/9375391/MV5BYjg1Yjk1MTktYzE5Mi00ODkwLWFkZTQtNTYxYTY3ZDVmMWUxXkEyXkFqcGdeQXVyNjUwNzk3NDc_._V1_.jpg"
-          alt=""
-        />
-        <div class="text">
-          <h6>Richard</h6>
-          <p class="text-muted">I'm not sure...</p>
-        </div>
-        <span class="time text-muted small">13:21</span>
-      </div>
-      <hr />
-      <div class="friend-drawer friend-drawer--onhover">
-        <img
-          class="profile-image"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXzQ3HEvJBpgptB48mdCwRt_BHrmNrDwQiIlrjgJbDKihAV_NI"
-          alt=""
-        />
-        <div class="text">
-          <h6>XXXXX</h6>
-          <p class="text-muted">Hi, wanna see something?</p>
-        </div>
-        <span class="time text-muted small">13:21</span>
-      </div>
-    </div>
-    <div class="col-md-8">
-      <div class="settings-tray">
-        <div class="friend-drawer no-gutters friend-drawer--grey">
-          <img
-            class="profile-image"
-            src="{{friend.profile.picture.url}}"
-            alt=""
-          />
-          <div class="text">
-            <h6>{{friend.profile.name}}</h6>
-            <p class="text-muted">
-              Layin' down the law since like before Christ...
-            </p>
-          </div>
-          <span class="settings-tray--right">
-            <i class="fa fa-refresh"></i>
-            <i class="fa-regular fa-message"></i>
-            <i class="fa fa-bars"></i>
-          </span>
-        </div>
-      </div>
-      <div class="chat-panel" id="chat-panel">
-        {% for chat_message in chat_messages %} 
-        {% if chat_message.msg_sender == request.user.profile %}
-
-        <div class="row no-gutters" id="chat-box">
-          <div class="col-md-6 offset-md-6" id="chat-box-inner">
-            <div class="chat-bubble chat-box-sent text-box chat-bubble--right">
-              {{chat_message.body}}
-            </div>
-          </div>
-        </div>
-        {% else %}
-        <div class="row no-gutters" id="chat-box-rec">
-          <div class="col-md-6">
-            <div class="chat-bubble chat-box-rece text-box-l chat-bubble--left">
-              {{chat_message.body}}
-            </div>
-          </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        <input
-          type="hidden"
-          id="rece-absolute-url-input"
-          value="{% url 'recemsg' friend.profile.id%}"
-        />
-        <input type="hidden" id="initial-msg-count" value="{{chat_count}}" />
-      </div>
-      <div class="bg-light">
-        <div class="col-md-8 offset-md-2">
-          <div class="card">
-            <div class="card-body">
-              <form method="POST" id="chatform">
-                {% csrf_token %}
-                <div class="form-group">
-                  <textarea
-                    class="form-control"
-                    name="message"
-                    id="message"
-                    rows="3"
-                    placeholder="Type your message..."
-                  ></textarea>
-                </div>
-                <input
-                  type="hidden"
-                  id="absolute-url-input"
-                  value="{% url 'sentmsg' friend.profile.id%}"
-                />
-                <div class="text-right bg-light">
-                  <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-paper-plane text-white"></i> Send
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <section style="background-color: #eee">
   <div class="container py-5 py-5 bg-light">
@@ -200,110 +19,66 @@
             </div>
           </div>
           <div
-            class="card-body overflow-auto"
+            class="card-body overflow-auto chat-panel"
             data-mdb-perfect-scrollbar="true"
             style="position: relative; height: 400px"
+            id="chat-panel"
           >
             {% for chat_message in chat_messages %}
             {% if chat_message.msg_sender == request.user.profile %}
 
-            <div class="d-flex justify-content-between">
-              <p class="small mb-1"> {{chat_message.msg_sender}}</p>
-              <p class="small mb-1 text-muted">23 Jan 2:00 pm</p>
-            </div>
-            <div class="d-flex flex-row justify-content-start">
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava5-bg.webp"
-                alt="avatar 1"
-                style="width: 45px; height: 100%"
-              />
-              <div>
-                <p
-                  class="small p-2 ms-3 mb-3 rounded-3"
-                  style="background-color: #f5f6f7"
-                >
-                  {{chat_message.body}}
-                </p>
+              <div class="row no-gutters" id="chat-box">
+                <div class="col-md-6 offset-md-6" id="chat-box-inner">
+                  <div class="chat-bubble chat-box-sent text-box chat-bubble--right">
+                    {{chat_message.body}}
+                  </div>
+                </div>
               </div>
-            </div>
             {% else %}
-            <div class="d-flex justify-content-between">
-              <p class="small mb-1 text-muted">23 Jan 2:05 pm</p>
-              <p class="small mb-1"> {{chat_message.msg_sender}}</p>
+        <div class="row no-gutters" id="chat-box-rec">
+          <div class="col-md-6">
+            <div class="chat-bubble chat-box-rece text-box-l chat-bubble--left">
+              {{chat_message.body}}
             </div>
-            <div class="d-flex flex-row justify-content-end mb-4 pt-1">
-              <div>
-                <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-warning">
-                   {{chat_message.body}}
-                </p>
-              </div>
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                alt="avatar 1"
-                style="width: 45px; height: 100%"
-              />
-            </div>
+          </div>
+        </div>
             {% endif %}
             {% endfor %}
-            <div class="d-flex justify-content-between">
-              <p class="small mb-1">Timona Siera</p>
-              <p class="small mb-1 text-muted">23 Jan 5:37 pm</p>
-            </div>
-            <div class="d-flex flex-row justify-content-start">
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava5-bg.webp"
-                alt="avatar 1"
-                style="width: 45px; height: 100%"
-              />
-              <div>
-                <p
-                  class="small p-2 ms-3 mb-3 rounded-3"
-                  style="background-color: #f5f6f7"
-                >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit
-                  similique quae consequatur
-                </p>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-between">
-              <p class="small mb-1 text-muted">23 Jan 6:10 pm</p>
-              <p class="small mb-1">Johny Bullock</p>
-            </div>
-            <div class="d-flex flex-row justify-content-end mb-4 pt-1">
-              <div>
-                <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-warning">
-                  Dolorum quasi voluptates quas amet in repellendus perspiciatis
-                  fugiat
-                </p>
-              </div>
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                alt="avatar 1"
-                style="width: 45px; height: 100%"
-              />
-            </div>
+            <input
+              type="hidden"
+              id="rece-absolute-url-input"
+              value="{% url 'recemsg' friend.profile.id%}"
+            />
+            <input
+              type="hidden"
+              id="initial-msg-count"
+              value="{{chat_count}}"
+            />
           </div>
           <div
             class="card-footer text-muted d-flex justify-content-start align-items-center p-3"
           >
-            <div class="input-group mb-3">
+            <form method="POST" id="chatform" class="w-100" >
+              {% csrf_token %}
+              <div class="form-group ">
+                <textarea
+                  class="form-control "
+                  name="message"
+                  id="message"
+                  placeholder="Type your message..."
+                ></textarea>
+              </div>
               <input
-                type="text"
-                class="form-control"
-                placeholder="Type message"
-                aria-label="Recipient's username"
-                aria-describedby="button-addon2"
+                type="hidden"
+                id="absolute-url-input"
+                value="{% url 'sentmsg' friend.profile.id%}"
               />
-              <button
-                class="btn btn-warning"
-                type="button"
-                id="button-addon2"
-                style="padding-top: 0.55rem"
-              >
-                Button
-              </button>
-            </div>
+              <div class="text-right bg-light">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa-solid fa-paper-plane text-white"></i> Send
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
